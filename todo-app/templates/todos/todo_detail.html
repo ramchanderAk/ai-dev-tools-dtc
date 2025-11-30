@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ todo.title }} - TODO App{% endblock %}
+
+{% block content %}
+<div class="detail-container">
+    <div class="detail-header">
+        <a href="{% url 'todo-list' %}" class="back-link">← Back to list</a>
+    </div>
+
+    <div class="detail-card">
+        <div class="detail-badges">
+            <span class="badge priority-{{ todo.priority }}">
+                {{ todo.get_priority_display }} Priority
+            </span>
+            {% if todo.is_resolved %}
+            <span class="badge badge-success">✓ Completed</span>
+            {% else %}
+            <span class="badge badge-warning">⏳ Active</span>
+            {% endif %}
+            {% if todo.is_overdue %}
+            <span class="badge badge-danger">⚠️ Overdue</span>
+            {% endif %}
+        </div>
+
+        <h1 class="detail-title {% if todo.is_resolved %}todo-title-resolved{% endif %}">
+            {{ todo.title }}
+        </h1>
+
+        {% if todo.description %}
+        <div class="detail-section">
+            <h3>Description</h3>
+            <p class="detail-description">{{ todo.description|linebreaks }}</p>
+        </div>
+        {% endif %}
+
+        <div class="detail-section">
+            <h3>Details</h3>
+            <div class="detail-info">
+                <div class="info-item">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value">
+                        {% if todo.is_resolved %}
+                            <span class="status-completed">✓ Completed</span>
+                        {% else %}
+                            <span class="status-active">Active</span>
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Priority:</span>
+                    <span class="info-value priority-{{ todo.priority }}">
+                        {{ todo.get_priority_display }}
+                    </span>
+                </div>
+
+                {% if todo.due_date %}
+                <div class="info-item">
+                    <span class="info-label">Due Date:</span>
+                    <span class="info-value {% if todo.is_overdue %}text-danger{% endif %}">
+                        {{ todo.due_date|date:"F d, Y" }}
+                        {% if todo.is_overdue %}
+                            (Overdue)
+                        {% endif %}
+                    </span>
+                </div>
+                {% endif %}
+
+                <div class="info-item">
+                    <span class="info-label">Created:</span>
+                    <span class="info-value">{{ todo.created_at|date:"F d, Y g:i A" }}</span>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label">Last Updated:</span>
+                    <span class="info-value">{{ todo.updated_at|date:"F d, Y g:i A" }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-actions">
+            <a href="{% url 'todo-update' todo.pk %}" class="btn btn-primary">Edit TODO</a>
+            <a href="{% url 'todo-toggle' todo.pk %}" class="btn btn-success">
+                {% if todo.is_resolved %}Mark as Active{% else %}Mark as Completed{% endif %}
+            </a>
+            <a href="{% url 'todo-delete' todo.pk %}" class="btn btn-danger">Delete TODO</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

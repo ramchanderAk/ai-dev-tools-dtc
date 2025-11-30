@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} TODO - TODO App{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <a href="{% url 'todo-list' %}" class="back-link">← Back to list</a>
+    </div>
+
+    <div class="form-card">
+        <h2 class="form-title">
+            {% if form.instance.pk %}
+                Edit TODO
+            {% else %}
+                Create New TODO
+            {% endif %}
+        </h2>
+
+        <form method="post" class="todo-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="form-errors">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}" class="form-label">
+                    Title <span class="required">*</span>
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                <div class="field-errors">
+                    {{ form.title.errors }}
+                </div>
+                {% endif %}
+                {% if form.title.help_text %}
+                <small class="form-help">{{ form.title.help_text }}</small>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}" class="form-label">
+                    Description
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <div class="field-errors">
+                    {{ form.description.errors }}
+                </div>
+                {% endif %}
+                {% if form.description.help_text %}
+                <small class="form-help">{{ form.description.help_text }}</small>
+                {% endif %}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.due_date.id_for_label }}" class="form-label">
+                        Due Date
+                    </label>
+                    {{ form.due_date }}
+                    {% if form.due_date.errors %}
+                    <div class="field-errors">
+                        {{ form.due_date.errors }}
+                    </div>
+                    {% endif %}
+                    {% if form.due_date.help_text %}
+                    <small class="form-help">{{ form.due_date.help_text }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.priority.id_for_label }}" class="form-label">
+                        Priority
+                    </label>
+                    {{ form.priority }}
+                    {% if form.priority.errors %}
+                    <div class="field-errors">
+                        {{ form.priority.errors }}
+                    </div>
+                    {% endif %}
+                    {% if form.priority.help_text %}
+                    <small class="form-help">{{ form.priority.help_text }}</small>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    {{ form.is_resolved }}
+                    <span>Mark as completed</span>
+                </label>
+                {% if form.is_resolved.errors %}
+                <div class="field-errors">
+                    {{ form.is_resolved.errors }}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    {% if form.instance.pk %}
+                        Update TODO
+                    {% else %}
+                        Create TODO
+                    {% endif %}
+                </button>
+                <a href="{% url 'todo-list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
